@@ -17,7 +17,8 @@ public class Program
             var messagesOut = csvReader.GetRecords<ChirpOutput>(); 
             foreach (var message in messagesOut)
             { 
-                Console.WriteLine($"{message.Author}: {message.Message} ({message.Timestamp})");
+                var dateFormatted = DateTimeOffset.FromUnixTimeSeconds(message.Timestamp).UtcDateTime;
+                Console.WriteLine($"{message.Author}: {dateFormatted} ({message.Timestamp})");
             }
         }
         else if (args[0] == "cheep")
