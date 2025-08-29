@@ -8,13 +8,13 @@ public class Program
 {
     public static void Main(string[] args)
     {
-        using var reader = new StreamReader("chirp_cli_db.csv");
-        using var csv1 = new CsvReader(reader, CultureInfo.InvariantCulture);
-        using var writer = new StreamWriter("chirp_cli_db.csv");
-        using var csv2 = new CsvWriter(writer, CultureInfo.InvariantCulture);
+        var filepath = "chirp_cli_db.csv";
+
         if (args[0] == "read")
-        { 
-            var messagesOut = csv1.GetRecords<ChirpOutput>(); 
+        {
+            using var reader = new StreamReader(filepath);
+            using var csvReader = new CsvReader(reader, CultureInfo.InvariantCulture); 
+            var messagesOut = csvReader.GetRecords<ChirpOutput>(); 
             foreach (var message in messagesOut)
             { 
                 Console.WriteLine($"{message.Author}: {message.Message} ({message.Timestamp})");
@@ -22,11 +22,18 @@ public class Program
         }
         else if (args[0] == "cheep")
         {
-            var messagesIn = new List<Cheep>
+            var messagesIn = new List<Cheep>();
+            if (File.Exists(filepath))
             {
-                new Cheep { Author = "TestName", Message = args[1], Timestamp = 12 }
-            };
-            csv2.WriteRecords(messagesIn);
+                using var reader = new StreamReader(filepath);
+                using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
+                messagesIn.AddRange(csv.GetRecords<Cheep>());
+            }
+            
+            messagesIn.Add(new Cheep { Author = "TestName", Message = args[1], Timestamp = 12});
+            using var writer = new StreamWriter(filepath, false);
+            using var csvWriter = new CsvWriter(writer, CultureInfo.InvariantCulture);
+            csvWriter.WriteRecords(messagesIn);
         }
     }
 }
