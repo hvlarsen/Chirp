@@ -30,7 +30,10 @@ public class Program
                 messagesIn.AddRange(csv.GetRecords<Cheep>());
             }
             
-            messagesIn.Add(new Cheep { Author = "TestName", Message = args[1], Timestamp = 12});
+            string currentUser = Environment.UserName;
+            long currentTimestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+
+            messagesIn.Add(new Cheep { Author = currentUser, Message = args[1], Timestamp = (int)currentTimestamp });
             using var writer = new StreamWriter(filepath, false);
             using var csvWriter = new CsvWriter(writer, CultureInfo.InvariantCulture);
             csvWriter.WriteRecords(messagesIn);
