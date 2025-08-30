@@ -1,15 +1,22 @@
-﻿using System;
-using System.Globalization;
-using System.IO;
+﻿using System.Globalization;
 using CsvHelper;
-using System.Collections.Generic;
+
+namespace Chirp.CLI;
 
 public class Program
 {
     public static void Main(string[] args)
     {
         var filepath = "chirp_cli_db.csv";
-
+        
+        if (args.Length == 0)
+        {
+            Console.WriteLine("You must also write an argument. Options:");
+            Console.WriteLine("  read              - Show all cheeps");
+            Console.WriteLine("  cheep <message>   - Add a new cheep");
+            return;
+        }
+        
         if (args[0] == "read")
         {
             using var reader = new StreamReader(filepath);
@@ -18,7 +25,7 @@ public class Program
             foreach (var message in messagesOut)
             { 
                 var dateFormatted = DateTimeOffset.FromUnixTimeSeconds(message.Timestamp).UtcDateTime;
-                Console.WriteLine($"{message.Author}: {dateFormatted} ({message.Timestamp})");
+                Console.WriteLine($"{message.Author} @ {dateFormatted} @ {message.Message}");
             }
         }
         else if (args[0] == "cheep")
