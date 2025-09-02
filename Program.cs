@@ -40,7 +40,7 @@ public class Program
             
             string currentUser = Environment.UserName;
             long currentTimestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-            var cheep = new Cheep( currentUser, args[1], (long)currentTimestamp );
+            var cheep = new Cheep( currentUser, string.Join(" ", args[1..]), (long)currentTimestamp );
             messagesIn.Add(cheep);
             using var writer = new StreamWriter(filepath, false);
             using var csvWriter = new CsvWriter(writer, CultureInfo.InvariantCulture);
