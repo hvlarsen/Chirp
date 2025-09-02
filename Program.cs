@@ -21,7 +21,7 @@ public class Program
         {
             using var reader = new StreamReader(filepath);
             using var csvReader = new CsvReader(reader, CultureInfo.InvariantCulture); 
-            var messagesOut = csvReader.GetRecords<ChirpOutput>(); 
+            var messagesOut = csvReader.GetRecords<Cheep>(); 
             foreach (var message in messagesOut)
             { 
                 var dateFormatted = DateTimeOffset.FromUnixTimeSeconds(message.Timestamp).UtcDateTime;
@@ -40,8 +40,8 @@ public class Program
             
             string currentUser = Environment.UserName;
             long currentTimestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-
-            messagesIn.Add(new Cheep { Author = currentUser, Message = args[1], Timestamp = (int)currentTimestamp });
+            var cheep = new Cheep( currentUser, args[1], (int)currentTimestamp );
+            messagesIn.Add(cheep);
             using var writer = new StreamWriter(filepath, false);
             using var csvWriter = new CsvWriter(writer, CultureInfo.InvariantCulture);
             csvWriter.WriteRecords(messagesIn);
@@ -51,16 +51,5 @@ public class Program
 
 
 
-public class ChirpOutput
-{
-    public required string Author { get; set; }
-    public required string Message { get; set; }
-    public int Timestamp { get; set; }
-}
 
-public class Cheep
-{    
-    public required string Author { get; set; }
-    public required string Message { get; set; }
-    public int Timestamp { get; set; }
-}
+public record Cheep(string Author, string Message, long Timestamp);
