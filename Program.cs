@@ -1,7 +1,8 @@
 ﻿using System.CommandLine;
-using System.CommandLine.Invocation;
 using System.Globalization;
 using CsvHelper;
+using SimpleDB;
+
 
 namespace Chirp.CLI;
 
@@ -9,22 +10,15 @@ public class Program
 {
     public static async Task<int> Main(string[] args)
     {
-        var filepath = "chirp_cli_db.csv";
+        var filepath = "chirp_cli_db.csv"; // can be deleted databaseRepository is also implemented with Cheep command
+        var databaseRepository = new CsvDatabase<Cheep>();
 
         var rootCommand = new RootCommand("Chirp (X formally known as Twitter) ");
 
         var readCommand = new Command("read", "Show all cheeps");
         readCommand.SetHandler(() =>
         {
-            if (!File.Exists(filepath))
-            {
-                Console.WriteLine("No cheeps found.");
-                return;
-            }
-
-            using var reader = new StreamReader(filepath);
-            using var csvReader = new CsvReader(reader, CultureInfo.InvariantCulture);
-            var messagesOut = csvReader.GetRecords<Cheep>();
+            var messagesOut = databaseRepository.Read();
             foreach (var message in messagesOut)
             {
                 var dateFormatted = DateTimeOffset.FromUnixTimeSeconds(message.Timestamp).UtcDateTime;
@@ -62,6 +56,4 @@ public class Program
 
         return await rootCommand.InvokeAsync(args);
     }
-
-    public record Cheep(string Author, string Message, long Timestamp);
 }
