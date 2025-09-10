@@ -15,7 +15,23 @@ public sealed class CsvDatabase<T> : IDatabaseRepository<T>
     }
     public void Store(T record)
     {
-        throw new NotImplementedException();
+        if (File.Exists(_filePath))
+        {
+            var messageIn = this.Read().ToList();
+
+            messageIn.Add(record);
+
+            using var writer = new StreamWriter(_filePath, false);
+            using var csvWriter = new CsvWriter(writer, CultureInfo.InvariantCulture);
+            csvWriter.WriteRecords(messageIn);
+
+            Console.WriteLine("Cheep added!");
+
+        }
+        else
+        {
+            Console.WriteLine("File doesn't exist");
+        }
         
     }
 }
