@@ -10,7 +10,6 @@ public class Program
 {
     public static async Task<int> Main(string[] args)
     {
-        var filepath = "chirp_cli_db.csv"; // can be deleted databaseRepository is also implemented with Cheep command
         var databaseRepository = new CsvDatabase<Cheep>();
 
         var rootCommand = new RootCommand("Chirp (X formally known as Twitter) ");
@@ -31,24 +30,12 @@ public class Program
         cheepCommand.AddArgument(messageArg);
         cheepCommand.SetHandler((string message) =>
         {
-            var messagesIn = new List<Cheep>();
-            if (File.Exists(filepath))
-            {
-                using var reader = new StreamReader(filepath);
-                using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
-                messagesIn.AddRange(csv.GetRecords<Cheep>());
-            }
-
             string currentUser = Environment.UserName;
             long currentTimestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
             var cheep = new Cheep(currentUser, message, currentTimestamp);
-            messagesIn.Add(cheep);
+            databaseRepository.Store(cheep);
+                        Console.WriteLine("Cheep added!");
 
-            using var writer = new StreamWriter(filepath, false);
-            using var csvWriter = new CsvWriter(writer, CultureInfo.InvariantCulture);
-            csvWriter.WriteRecords(messagesIn);
-
-            Console.WriteLine("Cheep added!");
         }, messageArg);
 
         rootCommand.AddCommand(readCommand);
