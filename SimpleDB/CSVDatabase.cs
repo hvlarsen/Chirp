@@ -15,23 +15,15 @@ public sealed class CsvDatabase<T> : IDatabaseRepository<T>
     }
     public void Store(T record)
     {
-        if (File.Exists(_filePath))
-        {
-            var messageIn = this.Read().ToList();
+        var existingMessages = File.Exists(_filePath)
+        ? this.Read().ToList()
+        : new List<T>();
 
-            messageIn.Add(record);
+        existingMessages.Add(record);
 
-            using var writer = new StreamWriter(_filePath, false);
+        using var writer = new StreamWriter(_filePath, false);
             using var csvWriter = new CsvWriter(writer, CultureInfo.InvariantCulture);
-            csvWriter.WriteRecords(messageIn);
-
-            Console.WriteLine("Cheep added!");
-
-        }
-        else
-        {
-            Console.WriteLine("File doesn't exist");
-        }
+            csvWriter.WriteRecords(existingMessages);
         
     }
 }

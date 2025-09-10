@@ -34,6 +34,8 @@ public class Program
             long currentTimestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
             var cheep = new Cheep(currentUser, message, currentTimestamp);
             databaseRepository.Store(cheep);
+                        Console.WriteLine("Cheep added!");
+
         }, messageArg);
 
         rootCommand.AddCommand(readCommand);
