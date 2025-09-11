@@ -1,8 +1,7 @@
 ﻿using System.CommandLine;
 using System.Globalization;
 using CsvHelper;
-using SimpleDB;
-
+using Chirp.SimpleDB;
 
 namespace Chirp.CLI;
 
