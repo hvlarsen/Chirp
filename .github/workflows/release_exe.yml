@@ -3,7 +3,7 @@ name: Release .exe
 on:
   push:
     tags:
-      - 'v1.0'
+      - 'TagsTesting'
 
 jobs:
   build:
