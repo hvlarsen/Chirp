@@ -3,7 +3,7 @@ name: Release .exe
 on:
   push:
     tags:
-      - 'TagTesting'
+      - 'v*.*.*'
 
 jobs:
   build:
@@ -37,17 +37,35 @@ jobs:
         with:
           dotnet-version: 8.0.x
       - name: Publish for Windows
-        run: dotnet publish -c Release -r win-x64 --self-contained true -o publish/win-x64
+        run: dotnet publish -c Release -r win-x64 --self-contained false -p:PublishSingleFile=true -o publish/win-x64
       - name: Publish for macOS
-        run: dotnet publish -c Release -r osx-x64 --self-contained true -o publish/osx-x64
+        run: dotnet publish -c Release -r osx-x64 --self-contained false -p:PublishSingleFile=true -o publish/osx-x64
       - name: Publish for Linux
-        run: dotnet publish -c Release -r linux-x64 --self-contained true -o publish/linux-x64
-      - name: Zip executables
+        run: dotnet publish -c Release -r linux-x64 --self-contained false -p:PublishSingleFile=true -o publish/linux-x64
+      
+      - name: Create Windows zip
         run: |
-          cd publish
-          zip -r ../executables.zip .
-      - name: Upload zipped executables
-        uses: actions/upload-artifact@v4
+          cd publish/win-x64
+          zip -r ../../chirp-windows-x64.zip
+
+      - name: Create macOS zip
+        run: |
+          cd publish/osx-x64
+          zip -r ../../chirp-macos-x64.zip
+
+      - name: Create Linux zip
+        run: |
+          cd publish/linux-x64
+          zip -r ../../chirp-linux-x64.zip
+
+      
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
         with:
-          name: executables
-          path: executables.zip
+          tag_name: ${{ github.ref_name }}
+          name: Release ${{ github.ref_name }}
+          files: |
+            chirp-windows-x64.zip
+            chirp-macos-x64.zip
+            chirp-linux-x64.zip
+          generate_release_notes: true
