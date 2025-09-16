@@ -5,6 +5,9 @@ on:
     tags:
       - 'v*.*.*'
 
+permissions:
+  contents: write
+
 jobs:
   build:
 
@@ -46,17 +49,17 @@ jobs:
       - name: Create Windows zip
         run: |
           cd publish/win-x64
-          zip -r ../../chirp-windows-x64.zip
+          zip -r ../../chirp-windows-x64.zip .
 
       - name: Create macOS zip
         run: |
           cd publish/osx-x64
-          zip -r ../../chirp-macos-x64.zip
+          zip -r ../../chirp-macos-x64.zip .
 
       - name: Create Linux zip
         run: |
           cd publish/linux-x64
-          zip -r ../../chirp-linux-x64.zip
+          zip -r ../../chirp-linux-x64.zip .
 
       
       - name: Create Release
