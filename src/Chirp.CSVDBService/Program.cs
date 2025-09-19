@@ -1,6 +1,8 @@
 using Chirp.SimpleDB;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.WebHost.UseUrls("http://localhost:5165");
+
 var app = builder.Build();
 
 app.MapGet("/cheeps", (int? limit) =>
