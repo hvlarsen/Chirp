@@ -57,7 +57,7 @@ public class End2End : IDisposable
             StartInfo = new ProcessStartInfo
             {
                 FileName = "dotnet",
-                Arguments = $"\"{apiDll}\"",
+                Arguments = $"\"{apiDll}\" --urls http://localhost:5165",
                 UseShellExecute = false,
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
@@ -93,7 +93,7 @@ public class End2End : IDisposable
     private void ArrangeTestDatabase()
     {
         var exeDir = Path.GetFullPath(
-            Path.Combine("..", "..", "..", "..", "..", "src", "Chirp.CLI.Client",
+            Path.Combine("..", "..", "..", "..", "..", "src", "Chirp.CSVDBService",
                          "bin", "Debug", "net8.0")
         );
         var dbPath = Path.Combine(exeDir, "chirp_cli_db.csv");
