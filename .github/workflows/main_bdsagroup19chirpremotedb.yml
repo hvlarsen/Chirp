@@ -61,5 +61,5 @@ jobs:
         with:
           app-name: 'bdsagroup19chirpremotedb'
           slot-name: 'Production'
-          package: .
+          package: './.net-app'
           
