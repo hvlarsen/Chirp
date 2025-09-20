@@ -1,4 +1,5 @@
 using Chirp.SimpleDB;
+using Microsoft.VisualBasic;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,11 +10,21 @@ app.MapGet("/health", () =>
     Results.Ok();
 });
 
+
 app.MapGet("/cheeps", (int? limit) =>
 {
-    var cheeps = CsvDatabase<Cheep>.Instance.Read(limit).ToList();
-    return Results.Ok(cheeps);
+    try
+    {
+        var cheeps = CsvDatabase<Cheep>.Instance.Read(limit).ToList();
+        return Results.Ok(cheeps);
+    }
+    catch (FileNotFoundException)
+    {
+        return Results.Ok(new List<Cheep>());
+    }
+    
 });
+
 
 app.MapPost("/cheep", (Cheep cheep) =>
 {
