@@ -1,15 +1,28 @@
 using Chirp.SimpleDB;
-
 var builder = WebApplication.CreateBuilder(args);
-builder.WebHost.UseUrls("http://localhost:5165");
 
 var app = builder.Build();
 
+app.MapGet("/health", () =>
+{
+    return Results.Ok(new {status = "ok"});
+});
+
+
 app.MapGet("/cheeps", (int? limit) =>
 {
-    var cheeps = CsvDatabase<Cheep>.Instance.Read(limit).ToList();
-    return Results.Ok(cheeps);
+    try
+    {
+        var cheeps = CsvDatabase<Cheep>.Instance.Read(limit).ToList();
+        return Results.Ok(cheeps);
+    }
+    catch (FileNotFoundException)
+    {
+        return Results.Ok(new List<Cheep>());
+    }
+    
 });
+
 
 app.MapPost("/cheep", (Cheep cheep) =>
 {
