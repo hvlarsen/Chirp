@@ -6,11 +6,18 @@ namespace Chirp.CLI;
 
 public class Program
 {
-    private static HttpClient _http = new() { BaseAddress = new Uri("http://localhost:5165") };
+    private static HttpClient _http = new();
     public static void UseHttpClient(HttpClient client) => _http = client; // Method used only for tests. Overwrites _http
     public static Task<int> Main(string[] args)
     {
         var rootCommand = new RootCommand("Chirp (X formally known as Twitter) ");
+        var baseUrlOpt = new Option<string>(
+            name: "--base-url",
+            description: "base url of the CSVDB web service",
+            getDefaultValue: () =>
+                Environment.GetEnvironmentVariable("CSVDB_BASEURL") ?? "http://localhost:5165"
+        );
+        rootCommand.AddGlobalOption(baseUrlOpt);
 
         var readCommand = new Command("read", "Show all cheeps");
         readCommand.SetHandler(async () =>
