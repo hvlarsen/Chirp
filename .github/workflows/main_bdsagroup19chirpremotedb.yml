@@ -69,3 +69,5 @@ jobs:
           slot-name: 'Production'
           package: app.zip
           
+      - name: Show zip contents
+        run: unzip -l app.zip
