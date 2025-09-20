@@ -2,8 +2,15 @@
 
 namespace Chirp.EndToEnd.Test;
 
-public class End2End
+public class End2End : IDisposable
 {
+    private Process? _apiProcess;
+
+    public End2End()
+    {
+        StartApi();
+    }
+    
     [Fact]
     public void TestReadCheep()
     {
@@ -38,6 +45,31 @@ public class End2End
         Assert.Contains(testMessage, lastCheep);
         Assert.StartsWith(Environment.UserName, lastCheep);
     }
+    
+    private void StartApi()
+    {
+        var apiDll = Path.GetFullPath(
+            Path.Combine("..", "..", "..", "..", "..", "src", "Chirp.CSVDBService",
+                "bin", "Debug", "net8.0", "Chirp.CSVDBService.dll"));
+
+        _apiProcess = new Process
+        {
+            StartInfo = new ProcessStartInfo
+            {
+                FileName = "dotnet",
+                Arguments = $"\"{apiDll}\"",
+                UseShellExecute = false,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                CreateNoWindow = true
+            }
+        };
+
+        _apiProcess.Start();
+
+        // Give API a bit of time to boot
+        Thread.Sleep(3000);
+    }
 
     private static string RunCli(string arguments)
     {
@@ -57,7 +89,7 @@ public class End2End
         process.WaitForExit();
         return output;
     }
-
+    
     private void ArrangeTestDatabase()
     {
         var exeDir = Path.GetFullPath(
@@ -71,5 +103,14 @@ public class End2End
         );
 
         File.Copy(templatePath, dbPath, overwrite: true);
+    }
+    
+    public void Dispose()
+    {
+        if (_apiProcess != null && !_apiProcess.HasExited)
+        {
+            _apiProcess.Kill(entireProcessTree: true);
+            _apiProcess.Dispose();
+        }
     }
 }
