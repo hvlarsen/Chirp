@@ -6,10 +6,15 @@ namespace Chirp.CLI;
 
 public class Program
 {
-private static HttpClient _http = new() { BaseAddress = new Uri("https://bdsagroup19chirpremotedb.azurewebsites.net") };
+    private static HttpClient _http = new();
     public static void UseHttpClient(HttpClient client) => _http = client; // Method used only for tests. Overwrites _http
     public static Task<int> Main(string[] args)
     {
+        var env = Environment.GetEnvironmentVariable("DOTNET_ENIVRONMENT") ?? "Production";
+        var baseUrl = Environment.GetEnvironmentVariable("CHIRP_SERVICE_URL") ??
+        (env == "Development" ? "http://localhost:5165" : "https://bdsagroup19chirpremotedb.azurewebsites.net");
+        _http.BaseAddress = new Uri(baseUrl);
+
         var rootCommand = new RootCommand("Chirp (X formally known as Twitter) ");
 
         var readCommand = new Command("read", "Show all cheeps");
