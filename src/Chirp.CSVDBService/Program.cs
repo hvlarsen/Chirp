@@ -5,7 +5,7 @@ var app = builder.Build();
 
 app.MapGet("/health", () =>
 {
-    Results.Ok(new {status = "ok"});
+    return Results.Ok(new {status = "ok"});
 });
 
 
