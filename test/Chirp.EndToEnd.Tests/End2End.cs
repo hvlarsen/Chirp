@@ -9,6 +9,8 @@ public class End2End : IDisposable
     public End2End()
     {
         StartApi();
+        Environment.SetEnvironmentVariable("DOTNET_ENVIRONMENT", "Development");
+        Environment.SetEnvironmentVariable("CHIRP_SERVICE_URL", "http://localhost:5165");
     }
     
     [Fact]
