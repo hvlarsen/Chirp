@@ -10,7 +10,7 @@ public class Program
     public static void UseHttpClient(HttpClient client) => _http = client; // Method used only for tests. Overwrites _http
     public static Task<int> Main(string[] args)
     {
-        var env = Environment.GetEnvironmentVariable("DOTNET_ENIVRONMENT") ?? "Production";
+        var env = Environment.GetEnvironmentVariable("DOTNET_ENVIRONMENT") ?? "Production";
         var baseUrl = Environment.GetEnvironmentVariable("CHIRP_SERVICE_URL") ??
         (env == "Development" ? "http://localhost:5165" : "https://bdsagroup19chirpremotedb.azurewebsites.net");
         _http.BaseAddress = new Uri(baseUrl);
