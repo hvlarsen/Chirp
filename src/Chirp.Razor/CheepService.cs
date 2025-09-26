@@ -9,7 +9,10 @@ public interface ICheepService
 public class CheepService : ICheepService
 {
     // These would normally be loaded from a database for example
-    private static readonly List<Cheep> _cheeps = CsvDatabase<Cheep>.Instance.Read(100).ToList();
+    private static readonly List<Cheep> _cheeps = new()
+    {
+        new Cheep("system", "No DB connected yet", DateTimeOffset.UtcNow.ToUnixTimeSeconds())
+    };
 
     public List<Cheep> GetCheeps()
     {
