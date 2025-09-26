@@ -63,6 +63,14 @@ jobs:
           echo "Looking for app binaries:"
           find .net-app -maxdepth 2 -type f \( -name '*.dll' -o -name '*.deps.json' -o -name '*.runtimeconfig.json' \) -print
 
+      - name: Disable Oryx build during deployment
+        uses: azure/cli@v2
+        with:
+          inlineScript: |
+            RG=$(az webapp show -n bdsagroup19chirprazor --query resourceGroup -o tsv)
+            az webapp config appsettings set -g "$RG" -n bdsagroup19chirprazor --settings SCM_DO_BUILD_DURING_DEPLOYMENT=false
+
+
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
@@ -71,4 +79,5 @@ jobs:
           app-name: 'bdsagroup19chirprazor'
           slot-name: 'Production'
           package: .net-app
+          type: 'zip'
           
