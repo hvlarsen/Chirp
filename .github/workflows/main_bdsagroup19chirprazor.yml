@@ -74,6 +74,12 @@ jobs:
             az webapp restart -g kfje_rg_5345 -n bdsagroup19chirprazor
 
 
+      - name: Zip published app
+        run: |
+          cd ./.net-app
+          zip -r ../app.zip .
+          cd ..
+      
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
@@ -81,6 +87,5 @@ jobs:
         with:
           app-name: 'bdsagroup19chirprazor'
           slot-name: 'Production'
-          package: .net-app
-          type: 'zip'
+          package: ${{ github.workspace }}/app.zip
           
