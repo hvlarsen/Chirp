@@ -67,8 +67,11 @@ jobs:
         uses: azure/cli@v2
         with:
           inlineScript: |
-            RG=$(az webapp show -n bdsagroup19chirprazor --query resourceGroup -o tsv)
-            az webapp config appsettings set -g "$RG" -n bdsagroup19chirprazor --settings SCM_DO_BUILD_DURING_DEPLOYMENT=false
+            az webapp config appsettings set \
+             -g kfje_rg_5345 \
+             -n bdsagroup19chirprazor \
+             --settings SCM_DO_BUILD_DURING_DEPLOYMENT=false
+            az webapp restart -g kfje_rg_5345 -n bdsagroup19chirprazor
 
 
 
