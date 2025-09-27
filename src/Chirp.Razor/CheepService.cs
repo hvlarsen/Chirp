@@ -8,11 +8,7 @@ public interface ICheepService
 
 public class CheepService : ICheepService
 {
-    // These would normally be loaded from a database for example
-    private static readonly List<Cheep> _cheeps = new()
-    {
-        new Cheep("system", "No DB connected yet", DateTimeOffset.UtcNow.ToUnixTimeSeconds())
-    };
+    private static readonly List<Cheep> _cheeps = CsvDatabase<Cheep>.Instance.Read(100).ToList();
 
     public List<Cheep> GetCheeps()
     {
