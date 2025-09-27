@@ -19,6 +19,10 @@ jobs:
 
       - name: Publish Chirp.Razor
         run: dotnet publish src/Chirp.Razor/Chirp.Razor.csproj -c Release -o ./publish_output
+      - name: Inspect publish output for CSV
+        run: |
+          echo "Looking for CSV in publish_output:"
+          find ./publish_output -name "chirp_cli_db.csv" -print || echo "NOT FOUND"
 
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
