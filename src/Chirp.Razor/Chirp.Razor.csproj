@@ -8,9 +8,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Chirp.SimpleDB\Chirp.SimpleDB.csproj" />
-    <None Include="../../data/chirp_cli_db.csv">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>  
+      <Content Include="..\..\data\chirp_cli_db.csv">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
   </ItemGroup>
 
 </Project>
