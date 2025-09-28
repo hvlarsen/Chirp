@@ -6,26 +6,39 @@ public interface ICheepService
     public List<Cheep> GetCheepsFromAuthor(string author);
 }
 
+// CheepService.cs
 public class CheepService : ICheepService
 {
-    public List<Cheep> GetCheeps()
+    private readonly DBFacade _dbFacade;
+
+    public CheepService()
     {
-        Console.WriteLine($"[CheepService] Reading cheeps from: {Path.GetFullPath("chirp_cli_db.csv")}");
-        return CsvDatabase<Cheep>.Instance.Read(100).ToList();
+        _dbFacade = new DBFacade();
     }
 
-    public List<Cheep> GetCheepsFromAuthor(string author)
+    public IEnumerable<Cheep> GetCheeps()
     {
-        Console.WriteLine($"[CheepService] Reading cheeps for author {author} from: {Path.GetFullPath("chirp_cli_db.csv")}");
-        return CsvDatabase<Cheep>.Instance.Read()
-            .Where(x => x.Author == author)
-            .ToList();
+        return _dbFacade.GetAllCheeps();
     }
 
-    public static string UnixTimeStampToDateTimeString(double unixTimeStamp)
+    public IEnumerable<Cheep> GetCheepsFromAuthor(string author)
     {
-        DateTime dateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-        dateTime = dateTime.AddSeconds(unixTimeStamp);
-        return dateTime.ToString("MM/dd/yy H:mm:ss");
+        return _dbFacade.GetCheepsByAuthor(author);
+    }
+
+    public void CreateCheep(string message, string author)
+    {
+        var cheep = new Cheep
+        {
+            Message = message,
+            Author = author,
+            Timestamp = DateTime.UtcNow
+        };
+        _dbFacade.AddCheep(cheep);
+    }
+
+    public void Dispose()
+    {
+        _dbFacade.Dispose();
     }
 }
