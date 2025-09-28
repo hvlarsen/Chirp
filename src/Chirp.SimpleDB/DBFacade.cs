@@ -33,19 +33,18 @@ public class DBFacade : IDisposable
     {
         var command = _connection.CreateCommand();
         command.CommandText = @"
-            SELECT Author, Message, Timestamp 
-            FROM Cheeps 
-            ORDER BY Timestamp DESC";
+        SELECT Author, Message, Timestamp
+        FROM Cheeps
+        ORDER BY Timestamp DESC";
 
         using var reader = command.ExecuteReader();
         while (reader.Read())
         {
-            yield return new Cheep
-            {
-                Author = reader.GetString(0),
-                Message = reader.GetString(1),
-                Timestamp = DateTime.Parse(reader.GetString(2))
-            };
+            yield return new Cheep(
+                Author: reader.GetString(0),
+                Message: reader.GetString(1),
+                Timestamp: reader.GetInt64(2)
+            );
         }
     }
 
@@ -53,21 +52,20 @@ public class DBFacade : IDisposable
     {
         var command = _connection.CreateCommand();
         command.CommandText = @"
-            SELECT Author, Message, Timestamp 
-            FROM Cheeps 
-            WHERE Author = $author 
-            ORDER BY Timestamp DESC";
+        SELECT Author, Message, Timestamp
+        FROM Cheeps
+        WHERE Author = $author
+        ORDER BY Timestamp DESC";
         command.Parameters.AddWithValue("$author", author);
 
         using var reader = command.ExecuteReader();
         while (reader.Read())
         {
-            yield return new Cheep
-            {
-                Author = reader.GetString(0),
-                Message = reader.GetString(1),
-                Timestamp = DateTime.Parse(reader.GetString(2))
-            };
+            yield return new Cheep(
+                Author: reader.GetString(0),
+                Message: reader.GetString(1),
+                Timestamp: reader.GetInt64(2)
+            );
         }
     }
 
@@ -79,7 +77,7 @@ public class DBFacade : IDisposable
             VALUES ($author, $message, $timestamp)";
         command.Parameters.AddWithValue("$author", cheep.Author);
         command.Parameters.AddWithValue("$message", cheep.Message);
-        command.Parameters.AddWithValue("$timestamp", cheep.Timestamp.ToString("o"));
+        command.Parameters.AddWithValue("$timestamp", DateTimeOffset.UtcNow.ToUnixTimeSeconds());
         command.ExecuteNonQuery();
     }
 
