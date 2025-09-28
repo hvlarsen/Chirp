@@ -6,6 +6,8 @@ name: Build and test ASP.Net core app
 on:
   pull_request:
     branches: [ main ]
+  push:
+    branches: [ main ]
 
 jobs:
   build:
