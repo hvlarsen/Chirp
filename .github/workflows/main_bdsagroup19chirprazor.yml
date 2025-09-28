@@ -3,10 +3,12 @@
 
 name: Build and deploy ASP.Net Core app to Azure Web App - bdsagroup19chirprazor
 
+concurrency:
+  group: chirprazor-deploy
+  cancel-in-progress: true
+
 on:
   push:
-    branches: [ main ]
-  pull_request:
     branches: [ main ]
   workflow_dispatch:
 
@@ -88,5 +90,4 @@ jobs:
         with:
           app-name: 'bdsagroup19chirprazor'
           slot-name: 'Production'
-          package: ${{ github.workspace }}/app.zip
-          
+          package: ${{ github.workspace }}/app.zip          
