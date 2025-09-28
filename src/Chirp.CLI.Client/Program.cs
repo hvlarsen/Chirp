@@ -1,6 +1,6 @@
 ﻿using System.CommandLine;
 using System.Net.Http.Json;
-using Chirp.SimpleDB; // Only because it needs to know Cheep.cs
+using Chirp.SQLite; // Only because it needs to know Cheep.cs
 
 namespace Chirp.CLI;
 
