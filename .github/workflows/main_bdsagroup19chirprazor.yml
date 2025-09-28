@@ -90,4 +90,4 @@ jobs:
         with:
           app-name: 'bdsagroup19chirprazor'
           slot-name: 'Production'
-          package: ${{ github.workspace }}/app.zip          
+          package: ${{ github.workspace }}/app.zip
