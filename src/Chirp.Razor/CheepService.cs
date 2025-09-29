@@ -2,8 +2,8 @@ namespace Chirp.Razor.Data;
 
 public interface ICheepService
 {
-    public List<Cheep> GetCheeps();
-    public List<Cheep> GetCheepsFromAuthor(string author);
+    public IEnumerable<Cheep> GetCheeps();
+    public IEnumerable<Cheep> GetCheepsFromAuthor(string author);
 }
 
 // CheepService.cs
@@ -35,10 +35,5 @@ public class CheepService : ICheepService
             Timestamp = DateTime.UtcNow
         };
         _dbFacade.AddCheep(cheep);
-    }
-
-    public void Dispose()
-    {
-        _dbFacade.Dispose();
     }
 }
