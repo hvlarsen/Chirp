@@ -2,8 +2,8 @@ using Chirp.SimpleDB;
 
 public interface ICheepService
 {
-    public List<Cheep> GetCheeps();
-    public List<Cheep> GetCheepsFromAuthor(string author);
+    public List<Cheep> GetCheeps(int page);
+    public List<Cheep> GetCheepsFromAuthor(string author, int page);
 }
 
 public class CheepService : ICheepService
