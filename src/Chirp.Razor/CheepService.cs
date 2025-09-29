@@ -14,10 +14,10 @@ public class CheepService : ICheepService
     {
         if (page < 1) page = 1;
 
-        int skipPages = (page - 1) * PageSize;
+        int skipPages = (page - 1) * pageSize;
 
         Console.WriteLine($"[CheepService] Reading cheeps from: {Path.GetFullPath("chirp_cli_db.csv")} for page {page}");
-        return CsvDatabase<Cheep>.Instance.Read.Skip(skipPages).Take(pageSize).ToList();
+        return CsvDatabase<Cheep>.Instance.Read().Skip(skipPages).Take(pageSize).ToList();
     }
 
     public List<Cheep> GetCheepsFromAuthor(string author, int page)
@@ -27,7 +27,7 @@ public class CheepService : ICheepService
         int skipPages = (page - 1) * PageSize;
 
         Console.WriteLine($"[CheepService] Reading cheeps for author {author} from: {Path.GetFullPath("chirp_cli_db.csv")} for page {page}");
-        return CsvDatabase<Cheep>.Instance.Read().Where(x => x.Author == author).Skip(skipPages).Take(pageSize).ToList()
+        return CsvDatabase<Cheep>.Instance.Read().Where(x => x.Author == author).Skip(skipPages).Take(pageSize).ToList();
     }
 
     public static string UnixTimeStampToDateTimeString(double unixTimeStamp)
