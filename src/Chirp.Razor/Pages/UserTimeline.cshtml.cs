@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Chirp.SimpleDB; // Only because it needs to know Cheep.cs
+using Chirp.SimpleDB;
+using Microsoft.AspNetCore.Mvc.ModelBinding; 
 
 namespace Chirp.Razor.Pages;
 
@@ -8,15 +9,23 @@ public class UserTimelineModel : PageModel
 {
     private readonly ICheepService _service;
     public List<Cheep> Cheeps { get; set; } = new();
+    public int CurrentPage { get; set; } = 1; 
+
+    public string Author { get; set; } = "";
 
     public UserTimelineModel(ICheepService service)
     {
         _service = service;
     }
 
-    public ActionResult OnGet(string author)
+    public ActionResult OnGet(string author, [FromQuery] int page)
     {
-        Cheeps = _service.GetCheepsFromAuthor(author);
+        if (page == 0) page = 1;
+
+        CurrentPage = page;
+        Author = author;
+
+        Cheeps = _service.GetCheepsFromAuthor(author, CurrentPage);
         return Page();
     }
 }
