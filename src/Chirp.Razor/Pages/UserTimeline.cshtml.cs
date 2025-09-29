@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Chirp.SimpleDB; // Only because it needs to know Cheep.cs
+using Chirp.SimpleDB;
+using Microsoft.AspNetCore.Mvc.ModelBinding; 
 
 namespace Chirp.Razor.Pages;
 
