@@ -15,6 +15,8 @@ public class TestAPI : IClassFixture<WebApplicationFactory<Program>>
         var sourcePath = Path.Combine("..", "..", "..", "..", "..", "src", "Chirp.Razor", "chirp.db");
 
         File.Copy(sourcePath, targetPath, overwrite: true);
+
+        Environment.SetEnvironmentVariable("CHIRPDBPATH", targetPath);
         
         _fixture = fixture;
         _client = _fixture.CreateClient(new WebApplicationFactoryClientOptions { AllowAutoRedirect = true, HandleCookies = true });
