@@ -11,9 +11,9 @@ public class CheepService : ICheepService
 {
     private readonly DBFacade _dbFacade;
 
-    public CheepService()
+    public CheepService(DBFacade dbFacade)
     {
-        _dbFacade = new DBFacade();
+        _dbFacade = dbFacade;
     }
 
     public IEnumerable<Cheep> GetCheeps()
@@ -28,12 +28,6 @@ public class CheepService : ICheepService
 
     public void CreateCheep(string message, string author)
     {
-        var cheep = new Cheep
-        {
-            Message = message,
-            Author = author,
-            Timestamp = DateTime.UtcNow
-        };
-        _dbFacade.AddCheep(cheep);
+        //Not implemented yet
     }
 }

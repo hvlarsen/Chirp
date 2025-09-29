@@ -21,25 +21,54 @@ public class DBFacade
             _dbPath = Path.Combine(tempDir, "chirp.db");
         }
 
-        _connection = new SqliteConnection($"Data Source={_dbPath}");
+        
     }
 
     public List<Cheep> GetCheeps(int limit = 32)
     {
-        _connection.Open();
+        using var connection = new SqliteConnection($"Data Source={_dbPath}");
+        connection.Open();
         var cheeps = new List<Cheep>();
-        var command = _connection.CreateCommand();
-        command.CommandText = $@"select pub_date, message_id, author_id, text from message limit {limit}";
+        var command = connection.CreateCommand();
+        command.CommandText = $@"select m.pub_date, m.message_id, m.author_id, m.text, u.username from message m 
+        join user u on m.author_id = u.user_id where author_id = user_id order by m.pub_date desc limit {limit}";
 
         var reader = command.ExecuteReader();
 
-        while (reader.Read()) {
+        while (reader.Read())
+        {
             int pubDate = reader.GetInt32(0);
             int messageId = reader.GetInt32(1);
             int authorId = reader.GetInt32(2);
             string text = reader.GetString(3);
+            string username = reader.GetString(4);
 
-            cheeps.Add(new Cheep(messageId, authorId, text, pubDate));
+            cheeps.Add(new Cheep(messageId, authorId, text, pubDate, username));
+        }
+        return cheeps;
+    }
+
+    public List<Cheep> GetCheepsByAuthor(string author)
+    {
+        using var connection = new SqliteConnection($"Data Source={_dbPath}");
+        connection.Open();
+        var cheeps = new List<Cheep>();
+        var command = connection.CreateCommand();
+        command.CommandText = $@"select m.pub_date, m.message_id, m.author_id, m.text, u.username from message m join user u
+        on m.author_id = u.user_id where u.username = $author order by m.pub_date desc";
+
+        command.Parameters.AddWithValue("$author", author);
+
+        var reader = command.ExecuteReader();
+        while (reader.Read())
+        {
+            int pubDate = reader.GetInt32(0);
+            int messageId = reader.GetInt32(1);
+            int authorId = reader.GetInt32(2);
+            string text = reader.GetString(3);
+            string username = reader.GetString(4);
+
+            cheeps.Add(new Cheep(messageId, authorId, text, pubDate, username));
         }
         return cheeps;
     }
