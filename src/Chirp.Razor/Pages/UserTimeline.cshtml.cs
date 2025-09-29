@@ -1,22 +1,22 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Chirp.SimpleDB; // Only because it needs to know Cheep.cs
+using  Chirp.Razor.Data; // Only because it needs to know Cheep.cs
 
 namespace Chirp.Razor.Pages;
 
 public class UserTimelineModel : PageModel
 {
-    private readonly ICheepService _service;
+    private readonly DBFacade _service;
     public List<Cheep> Cheeps { get; set; } = new();
 
-    public UserTimelineModel(ICheepService service)
+    public UserTimelineModel(DBFacade service)
     {
         _service = service;
     }
 
     public ActionResult OnGet(string author)
     {
-        Cheeps = _service.GetCheepsFromAuthor(author);
+        Cheeps = _service.GetCheepsByAuthor(author);
         return Page();
     }
 }

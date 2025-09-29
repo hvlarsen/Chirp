@@ -1,15 +1,15 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Chirp.SimpleDB; // Only because it needs to know Cheep.cs
+using Chirp.Razor.Data;
 
 namespace Chirp.Razor.Pages;
 
 public class PublicModel : PageModel
 {
-    private readonly ICheepService _service;
+    private readonly DBFacade _service;
     public List<Cheep> Cheeps { get; set; } = new();
 
-    public PublicModel(ICheepService service)
+    public PublicModel(DBFacade service)
     {
         _service = service;
     }

@@ -1,4 +1,5 @@
 ﻿@page "/{author}"
+@using Chirp.Razor.Data
 @model Chirp.Razor.Pages.UserTimelineModel
 @{
     ViewData["Title"] = "Chirp!";
@@ -19,8 +20,8 @@
                         <strong>
                             <a href="/@cheep.Author">@cheep.Author</a>
                         </strong>
-                        @cheep.Message
-                        <small>&mdash; @CheepService.UnixTimeStampToDateTimeString(cheep.Timestamp)</small>
+                        @cheep.Text
+                        <small>&mdash; @cheep.FormattedDate</small>
                     </p>
                 </li>
             }

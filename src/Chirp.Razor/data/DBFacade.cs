@@ -5,8 +5,6 @@ namespace Chirp.Razor.Data;
 public class DBFacade
 {
     private readonly string _dbPath;
-    private readonly SqliteConnection _connection;
-
     public DBFacade()
     {
         var envPath = Environment.GetEnvironmentVariable("CHIRPDBPATH");
