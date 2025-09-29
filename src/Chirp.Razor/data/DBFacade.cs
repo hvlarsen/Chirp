@@ -24,8 +24,23 @@ public class DBFacade
         _connection = new SqliteConnection($"Data Source={_dbPath}");
     }
 
-    public List<Cheep> getCheeps()
+    public List<Cheep> GetCheeps(int limit = 32)
     {
-        
+        _connection.Open();
+        var cheeps = new List<Cheep>();
+        var command = _connection.CreateCommand();
+        command.CommandText = $@"select pub_date, message_id, author_id, text from message limit {limit}";
+
+        var reader = command.ExecuteReader();
+
+        while (reader.Read()) {
+            int pubDate = reader.GetInt32(0);
+            int messageId = reader.GetInt32(1);
+            int authorId = reader.GetInt32(2);
+            string text = reader.GetString(3);
+
+            cheeps.Add(new Cheep(messageId, authorId, text, pubDate));
+        }
+        return cheeps;
     }
 }

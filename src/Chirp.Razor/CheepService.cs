@@ -1,4 +1,4 @@
-using Chirp.SimpleDB;
+namespace Chirp.Razor.Data;
 
 public interface ICheepService
 {
@@ -18,7 +18,7 @@ public class CheepService : ICheepService
 
     public IEnumerable<Cheep> GetCheeps()
     {
-        return _dbFacade.GetAllCheeps();
+        return _dbFacade.GetCheeps();
     }
 
     public IEnumerable<Cheep> GetCheepsFromAuthor(string author)
