@@ -15,14 +15,12 @@ public class DBFacade
         }
         else
         {
-            var tempDir = Path.GetTempPath();
-            _dbPath = Path.Combine(tempDir, "chirp.db");
+            var baseDir = AppContext.BaseDirectory;
+            _dbPath = Path.Combine(baseDir, "chirp.db");
         }
-
-        
     }
 
-    public List<Cheep> GetCheeps(int limit = 32)
+    public List<Cheep> GetCheeps(int limit = 1000)
     {
         using var connection = new SqliteConnection($"Data Source={_dbPath}");
         connection.Open();
