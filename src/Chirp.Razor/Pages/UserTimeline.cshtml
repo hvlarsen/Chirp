@@ -26,6 +26,19 @@
                 </li>
             }
         </ul>
+        <div class="pagination">
+            @if (Model.CurrentPage > 1)
+            {
+                <a href="/@routeName?page=@(Model.CurrentPage - 1)">previous</a>
+            }
+            
+            <span>page @Model.CurrentPage</span>
+
+            @if (Model.Cheeps.Count == 32)
+            {
+                <a href="/@routeName?page=@(Model.CurrentPage + 1)">next</a>
+            }
+        </div>
     }
     else
     {

@@ -2,28 +2,35 @@ namespace Chirp.Razor.Data;
 
 public interface ICheepService
 {
-    public IEnumerable<Cheep> GetCheeps();
-    public IEnumerable<Cheep> GetCheepsFromAuthor(string author);
+    public List<Cheep> GetCheeps(int page);
+    public List<Cheep> GetCheepsByAuthor(string author, int page);
 }
 
-// CheepService.cs
 public class CheepService : ICheepService
 {
     private readonly DBFacade _dbFacade;
+    private const int pageSize = 32; 
 
     public CheepService(DBFacade dbFacade)
     {
         _dbFacade = dbFacade;
     }
-
-    public IEnumerable<Cheep> GetCheeps()
+    public List<Cheep> GetCheeps(int page)
     {
-        return _dbFacade.GetCheeps();
+        if (page < 1) page = 1;
+        int skipPages = (page - 1) * pageSize;
+
+        var cheeps = _dbFacade.GetCheeps();
+        return cheeps.Skip(skipPages).Take(pageSize).ToList();
     }
 
-    public IEnumerable<Cheep> GetCheepsFromAuthor(string author)
+    public List<Cheep> GetCheepsByAuthor(string author, int page)
     {
-        return _dbFacade.GetCheepsByAuthor(author);
+        if (page < 1) page = 1;
+        int skipPages = (page - 1) * pageSize;
+
+        var cheeps = _dbFacade.GetCheepsByAuthor(author);
+        return cheeps.Skip(skipPages).Take(pageSize).ToList();
     }
 
     public void CreateCheep(string message, string author)
