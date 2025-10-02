@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Chirp.SimpleDB;
-using Microsoft.AspNetCore.Mvc.ModelBinding; 
+using  Chirp.Razor.Data; 
 
 namespace Chirp.Razor.Pages;
 
@@ -25,7 +24,8 @@ public class UserTimelineModel : PageModel
         CurrentPage = page;
         Author = author;
 
-        Cheeps = _service.GetCheepsFromAuthor(author, CurrentPage);
+        Cheeps = _service.GetCheepsByAuthor(author, page);
+        
         return Page();
     }
 }

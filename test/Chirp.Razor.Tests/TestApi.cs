@@ -11,10 +11,12 @@ public class TestAPI : IClassFixture<WebApplicationFactory<Program>>
     {
         // Copy csv test file 
         var baseDir = AppContext.BaseDirectory;
-        var targetPath = Path.Combine(baseDir, "chirp_cli_db.csv");
-        var sourcePath = Path.Combine("..", "..", "..", "..", "..", "data", "chirp_cli_db_test.csv");
+        var targetPath = Path.Combine(baseDir, "chirp.db");
+        var sourcePath = Path.Combine("..", "..", "..", "..", "..", "src", "Chirp.Razor", "chirp.db");
 
         File.Copy(sourcePath, targetPath, overwrite: true);
+
+        Environment.SetEnvironmentVariable("CHIRPDBPATH", targetPath);
         
         _fixture = fixture;
         _client = _fixture.CreateClient(new WebApplicationFactoryClientOptions { AllowAutoRedirect = true, HandleCookies = true });
