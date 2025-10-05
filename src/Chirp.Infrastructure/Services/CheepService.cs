@@ -1,4 +1,8 @@
-namespace Chirp.Razor.Data;
+using Chirp.Application.Interfaces;
+using Chirp.Domain.Entities;
+using Chirp.Infrastructure.Data;
+
+namespace Chirp.Infrastructure.Services;
 public class CheepService : ICheepService
 {
     private readonly DBFacade _dbFacade;
