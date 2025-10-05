@@ -1,4 +1,6 @@
-namespace Chirp.Razor.Data;
+using Chirp.Domain.Entities;
+
+namespace Chirp.Application.Interfaces;
 
 public interface ICheepService
 {
