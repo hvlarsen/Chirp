@@ -1,4 +1,7 @@
-using Chirp.Razor.Data;
+using Chirp.Application.Interfaces;
+using Chirp.Infrastructure.Data;
+using Chirp.Infrastructure.Services;
+
 
 var builder = WebApplication.CreateBuilder(args);
 

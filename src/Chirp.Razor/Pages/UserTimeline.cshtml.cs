@@ -1,6 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Chirp.Domain.Entities;
+using Chirp.Application.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using  Chirp.Razor.Data; 
 
 namespace Chirp.Razor.Pages;
 
