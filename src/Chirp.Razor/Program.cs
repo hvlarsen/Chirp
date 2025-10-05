@@ -1,16 +1,28 @@
 using Chirp.Application.Interfaces;
+using Chirp.Infrastructure.Data;
 using Chirp.Infrastructure.Repositories;
 using Chirp.Infrastructure.Services;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddRazorPages();
-builder.Services.AddSingleton<CheepRepository>();
-builder.Services.AddSingleton<ICheepService, CheepService>();
+// EF Core setup
+builder.Services.AddDbContext<ChirpDbContext>(options =>
+    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+// Add services to the container.
+builder.Services.AddScoped<CheepRepository>();
+builder.Services.AddScoped<ICheepService, CheepService>();
+builder.Services.AddRazorPages();
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<ChirpDbContext>();
+    Console.WriteLine($"[EF] Database file: {db.Database.GetDbConnection().DataSource}");
+    DbInitializer.SeedDatabase(db);
+}
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
