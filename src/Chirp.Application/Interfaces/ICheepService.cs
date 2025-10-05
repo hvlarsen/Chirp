@@ -1,9 +1,9 @@
-using Chirp.Domain.Entities;
+using Chirp.Application.DTOs;
 
 namespace Chirp.Application.Interfaces;
 
 public interface ICheepService
 {
-    public List<Cheep> GetCheeps(int page);
-    public List<Cheep> GetCheepsByAuthor(string author, int page);
+    Task<List<CheepDto>> GetPublicTimelineAsync(int page);
+    Task<List<CheepDto>> GetPrivateTimelineAsync(string author, int page);
 }

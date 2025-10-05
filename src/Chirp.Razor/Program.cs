@@ -1,12 +1,12 @@
 using Chirp.Application.Interfaces;
-using Chirp.Infrastructure.Data;
+using Chirp.Infrastructure.Repositories;
 using Chirp.Infrastructure.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
-builder.Services.AddSingleton<DBFacade>();
+builder.Services.AddSingleton<CheepRepository>();
 builder.Services.AddSingleton<ICheepService, CheepService>();
 
 
