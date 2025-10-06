@@ -1,6 +1,7 @@
+using Chirp.Domain.Entities;
 using Microsoft.Data.Sqlite;
 
-namespace Chirp.Razor.Data;
+namespace Chirp.Infrastructure.Data;
 
 public class DBFacade
 {
