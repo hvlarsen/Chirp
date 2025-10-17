@@ -34,7 +34,7 @@ namespace Chirp.Razor.Tests
         var builder = new DbContextOptionsBuilder<ChirpDbContext>().UseSqlite(connection);
 
             using var context = new ChirpDbContext(builder.Options);
-        await context.Database.MigrateAsync(); // Applies the schema to the database
+        await context.Database.EnsureCreatedAsync(); // Applies the schema to the database
 
         // Act
             var response = await _client.GetAsync("/");
@@ -57,7 +57,7 @@ namespace Chirp.Razor.Tests
             var builder = new DbContextOptionsBuilder<ChirpDbContext>().UseSqlite(connection);
 
             using var context = new ChirpDbContext(builder.Options);
-            await context.Database.MigrateAsync(); // Applies the schema to the database
+            await context.Database.EnsureCreatedAsync(); // Applies the schema to the database
 
             context.Authors.Add(new Author { Name = "alexm", Email = "a@m.com" });
             context.Authors.Add(new Author { Name = "adho", Email = "a@h.com" });
