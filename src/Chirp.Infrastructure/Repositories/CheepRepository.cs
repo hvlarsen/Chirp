@@ -7,10 +7,12 @@ namespace Chirp.Infrastructure.Repositories;
 public class CheepRepository
 {
     private readonly ChirpDbContext _context;
+    private readonly AuthorRepository _authorRepository;
 
     public CheepRepository(ChirpDbContext context)
     {
         _context = context;
+        _authorRepository = new AuthorRepository(context);
     }
 
     public async Task<List<Cheep>> GetCheepsAsync(int page = 1, int pageSize = 32)
@@ -32,5 +34,28 @@ public class CheepRepository
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
             .ToListAsync();
+    }
+    
+    public async Task CreateCheepAsync(string authorName, string authorEmail, string text)
+    {
+        var author = await _authorRepository.GetAuthorByName(authorName);
+
+        // If author doesn't exist, create one
+        if (author == null)
+        {
+            await _authorRepository.CreateAuthorAsync(authorName, authorEmail);
+            author = await _authorRepository.GetAuthorByName(authorName);
+        }
+
+        // Create and add the cheep
+        var cheep = new Cheep
+        {
+            Author = author,
+            Text = text,
+            TimeStamp = DateTime.UtcNow
+        };
+
+        _context.Cheeps.Add(cheep);
+        await _context.SaveChangesAsync();
     }
 }
