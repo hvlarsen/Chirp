@@ -45,6 +45,11 @@ public class CheepRepository
         {
             await _authorRepository.CreateAuthorAsync(authorName, authorEmail);
             author = await _authorRepository.GetAuthorByName(authorName);
+            
+            if (author == null)
+            {
+                throw new InvalidOperationException($"Author '{authorName}' could not be created or found.");
+            }
         }
 
         // Create and add the cheep
