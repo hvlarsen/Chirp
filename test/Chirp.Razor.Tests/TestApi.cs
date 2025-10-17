@@ -9,33 +9,48 @@ using Microsoft.EntityFrameworkCore;
 using Chirp.Infrastructure.Data;
 using Chirp.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authorization.Infrastructure;
+using Microsoft.Extensions.DependencyInjection;
 using Chirp.Domain.Entities;
 
-namespace Chirp.Razor.Tests
+namespace Chirp.Razor.Tests //we use the same file-based Sqlite here so the app and test share the same schema
 {
     public class IntegrationTests : IClassFixture<WebApplicationFactory<Program>>
     {
         private readonly HttpClient _client;
+        private readonly SqliteConnection _connection;
         
         public IntegrationTests(WebApplicationFactory<Program> fixture)
         {
 
             Environment.SetEnvironmentVariable("ASPNETCORE_ENVIRONMENT", "Testing");
-            _client = fixture.CreateClient();
+            _connection = new SqliteConnection("DataSource=:memory:");
+            _connection.Open();
+
+            using (var setup = new ChirpDbContext(
+                new DbContextOptionsBuilder<ChirpDbContext>()
+                    .UseSqlite(_connection)
+                    .Options))
+            {
+                setup.Database.EnsureCreated();
+            }
+
+                var factory = fixture.WithWebHostBuilder(builder =>
+            {
+                builder.ConfigureServices(services =>
+                {
+                    services.AddDbContext<ChirpDbContext>(opts =>
+                    opts.UseSqlite(_connection)); // shared memory
+                });
+            });
+
+            _client = factory.CreateClient();
 
         }
 
         [Fact]
         public async Task CanSeePublicTimeline()
         {
-            // Arrange
-        using var connection = new SqliteConnection("Filename=:memory:");
-        await connection.OpenAsync();
-        var builder = new DbContextOptionsBuilder<ChirpDbContext>().UseSqlite(connection);
-
-            using var context = new ChirpDbContext(builder.Options);
-        await context.Database.EnsureCreatedAsync(); // Applies the schema to the database
-
+   
         // Act
             var response = await _client.GetAsync("/");
             response.EnsureSuccessStatusCode();
@@ -51,25 +66,25 @@ namespace Chirp.Razor.Tests
         [InlineData("adho")]
         public async Task CanSeePrivateTimeline(string author)
         {
-                // Arrange
-             using var connection = new SqliteConnection("Filename=:memory:");
-            await connection.OpenAsync();
-            var builder = new DbContextOptionsBuilder<ChirpDbContext>().UseSqlite(connection);
-
-            using var context = new ChirpDbContext(builder.Options);
-            await context.Database.EnsureCreatedAsync(); // Applies the schema to the database
-
-            context.Authors.Add(new Author { Name = "alexm", Email = "a@m.com" });
-            context.Authors.Add(new Author { Name = "adho", Email = "a@h.com" });
-            await context.SaveChangesAsync();
+            using (var db = new ChirpDbContext(
+               new DbContextOptionsBuilder<ChirpDbContext>()
+               .UseSqlite(_connection)
+               .Options))
+            {
+                db.Authors.Add(new Author { Name = "alexm", Email = "a@m.com" });
+                db.Authors.Add(new Author { Name = "adho", Email = "a@h.com" });
+                db.SaveChanges();
+            }
 
             var response = await _client.GetAsync($"/{author}");
             response.EnsureSuccessStatusCode();
-            var content = await response.Content.ReadAsStringAsync();
+            var html = await response.Content.ReadAsStringAsync();
 
-            Assert.Contains("Chirp!", content);
-            Assert.Contains($"{author}'s Timeline", content);
+            Assert.Contains("Chirp!", html);
+            Assert.Contains($"{author}'s Timeline", html);
         }
+        
+        public void Dispose() => _connection.Dispose();
     }
     }
 
