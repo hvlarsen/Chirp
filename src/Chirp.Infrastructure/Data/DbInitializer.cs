@@ -31,7 +31,7 @@ public static class DbInitializer
         };
 }
 
-// create all the cheeps
+// create all the cheeps for the applicaton
 /*
 void CreateCheeps() {
 
