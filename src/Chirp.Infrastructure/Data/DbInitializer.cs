@@ -6,6 +6,11 @@ using System.Linq;
 
 public static class DbInitializer
 {
+
+    public static bool DatabaseIsEmpty(ChirpDbContext chirpContext) {
+        return !(chirpContext.Authors.Any() && chirpContext.Cheeps.Any())
+    }
+    
     public static void SeedDatabase(ChirpDbContext chirpContext)
     {
         if (!(chirpContext.Authors.Any() && chirpContext.Cheeps.Any()))
