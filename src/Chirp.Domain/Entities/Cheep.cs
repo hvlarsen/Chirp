@@ -13,5 +13,5 @@ public class Cheep
     //Foreign keys:
     public int AuthorId { get; set; }
 
-    public Author Author { get; set; } = null;
+    public required Author Author { get; set; }
 }
