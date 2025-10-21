@@ -1,14 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Data.Sqlite;
-using System.Net.Http;
-using System.Threading.Tasks;
-using Xunit;
-using System.IO;
-using System;
 using Microsoft.EntityFrameworkCore;
 using Chirp.Infrastructure.Data;
-using Chirp.Infrastructure.Repositories;
-using Microsoft.AspNetCore.Authorization.Infrastructure;
+
 using Microsoft.Extensions.DependencyInjection;
 using Chirp.Domain.Entities;
 
@@ -34,7 +28,7 @@ namespace Chirp.Razor.Tests //we use the same file-based Sqlite here so the app 
                 setup.Database.EnsureCreated();
             }
 
-                var factory = fixture.WithWebHostBuilder(builder =>
+            var factory = fixture.WithWebHostBuilder(builder =>
             {
                 builder.ConfigureServices(services =>
                 {

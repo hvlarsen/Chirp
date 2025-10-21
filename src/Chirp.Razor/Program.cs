@@ -31,6 +31,7 @@ using (var scope = app.Services.CreateScope())
     if(!builder.Environment.IsEnvironment("Testing")) //If testing, dont seed data and dont add migrations
     // We manually "seed" data in tests for now
     {
+        context.Database.EnsureDeleted();
         context.Database.Migrate(); 
         DbInitializer.SeedDatabase(context);
     }
