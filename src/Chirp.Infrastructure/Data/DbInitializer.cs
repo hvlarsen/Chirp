@@ -6,6 +6,46 @@ using System.Linq;
 
 public static class DbInitializer
 {
+
+//  method to check if database is empty
+/*  public static bool DatabaseIsEmpty(ChirpDbContext chirpContext) {
+        return !(chirpContext.Authors.Any() && chirpContext.Cheeps.Any())
+    }
+*/
+
+// method to create all the authors 
+/*  List<Author> createAuthors () {
+    return new List<Author> {
+            new Author() { AuthorId = 1, Name = "Roger Histand", Email = "Roger+Histand@hotmail.com", Cheeps = new List<Cheep>() },
+            new Author() { AuthorId = 2, Name = "Luanna Muro", Email = "Luanna-Muro@ku.dk", Cheeps = new List<Cheep>() },
+            new Author() { AuthorId = 3, Name = "Wendell Ballan", Email = "Wendell-Ballan@gmail.com", Cheeps = new List<Cheep>() },
+            new Author() { AuthorId = 4, Name = "Nathan Sirmon", Email = "Nathan+Sirmon@dtu.dk", Cheeps = new List<Cheep>() },
+            new Author() { AuthorId = 5, Name = "Quintin Sitts", Email = "Quintin+Sitts@itu.dk", Cheeps = new List<Cheep>() },
+            new Author() { AuthorId = 6, Name = "Mellie Yost", Email = "Mellie+Yost@ku.dk", Cheeps = new List<Cheep>() },
+            new Author() { AuthorId = 7, Name = "Malcolm Janski", Email = "Malcolm-Janski@gmail.com", Cheeps = new List<Cheep>() },
+            new Author() { AuthorId = 8, Name = "Octavio Wagganer", Email = "Octavio.Wagganer@dtu.dk", Cheeps = new List<Cheep>() },
+            new Author() { AuthorId = 9, Name = "Johnnie Calixto", Email = "Johnnie+Calixto@itu.dk", Cheeps = new List<Cheep>() },
+            new Author() { AuthorId = 10, Name = "Jacqualine Gilcoine", Email = "Jacqualine.Gilcoine@gmail.com", Cheeps = new List<Cheep>() },
+            new Author() { AuthorId = 11, Name = "Helge", Email = "ropf@itu.dk", Cheeps = new List<Cheep>() },
+            new Author() { AuthorId = 12, Name = "Adrian", Email = "adho@itu.dk", Cheeps = new List<Cheep>() }
+        };
+}
+
+// create all the cheeps for the applicaton
+/*
+void CreateCheeps() {
+
+}
+*/
+
+// return all cheeps
+/*
+List<Cheep> returnAllCheeps () {
+
+}
+ 
+*/
+    
     public static void SeedDatabase(ChirpDbContext chirpContext)
     {
         if (!(chirpContext.Authors.Any() && chirpContext.Cheeps.Any()))

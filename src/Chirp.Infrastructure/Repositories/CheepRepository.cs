@@ -38,6 +38,10 @@ public class CheepRepository
     
     public async Task CreateCheepAsync(string authorName, string authorEmail, string text)
     {
+        if (text.Length > 160)
+        {
+            throw new ArgumentException("Cheep cannot be longer than 160 characters.");
+        }
         var author = await _authorRepository.GetAuthorByName(authorName);
 
         // If author doesn't exist, create one
