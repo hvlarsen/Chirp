@@ -1,9 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 using Chirp.Domain.Entities;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace Chirp.Infrastructure.Data;
 
-public class ChirpDbContext : DbContext
+public class ChirpDbContext : IdentityDbContext<ApplicationUser>
 {
     public DbSet<Author> Authors { get; set; } = null!;
     public DbSet<Cheep> Cheeps { get; set; } = null!;
@@ -20,6 +21,12 @@ public class ChirpDbContext : DbContext
         .WithOne(c => c.Author)
         .HasForeignKey(c => c.AuthorId)
         .OnDelete(DeleteBehavior.Cascade);
+        
+        modelBuilder.Entity<Author>()
+            .HasOne(a => a.ApplicationUser)
+            .WithMany() 
+            .HasForeignKey(a => a.ApplicationUserId)
+            .OnDelete(DeleteBehavior.SetNull);
 
         base.OnModelCreating(modelBuilder);
     }
