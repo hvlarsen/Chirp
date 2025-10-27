@@ -1,8 +1,10 @@
 using Chirp.Application.Interfaces;
+using Chirp.Domain.Entities;
 using Chirp.Infrastructure.Data;
 using Chirp.Infrastructure.Repositories;
 using Chirp.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +16,9 @@ builder.Services.AddScoped<ICheepService, CheepService>();
 string? connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 builder.Services.AddDbContext<ChirpDbContext>(options => options.UseSqlite(connectionString ?? "Data Source=Chirp.db"));
+
+builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
+    .AddEntityFrameworkStores<ChirpDbContext>();
 
 var app = builder.Build();
 
@@ -35,7 +40,6 @@ using (var scope = app.Services.CreateScope())
         context.Database.Migrate(); 
         DbInitializer.SeedDatabase(context);
     }
-    
 }
 
 app.UseHttpsRedirection();
@@ -51,7 +55,8 @@ app.UseStaticFiles();
 } */ //Test to check EF Core connection, keep for now, ill remove myself later when needed
 
 app.UseRouting();
-
+app.UseAuthentication();
+app.UseAuthorization();
 app.MapRazorPages();
 
 app.Run();
